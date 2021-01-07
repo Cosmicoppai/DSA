@@ -1,0 +1,37 @@
+def solveNQueens(self, n: int) -> List[List[str]]:
+	board = [['.']*n for i in range(n)]
+	res = []
+
+	def isvalid(row, col):
+		# check col
+		for i in range(row):
+			if board[i][col]=='Q':
+				return False
+		# check upper left
+		mrow, mcol = row, col
+		while mrow>0 and mcol>0:
+			mrow-=1
+			mcol-=1
+			if board[mrow][mcol]=='Q':
+				return False
+		# check upper right
+		vrow, vcol = row, col 
+		while vrow>0 and vcol<n-1:
+			vrow-=1
+			vcol+=1
+			if board[vrow][vcol]=='Q':
+				return False
+		return True
+
+	def backtrace(res, row):
+		if row==n:
+			temp = [''.join(line) for line in board]
+			res.append(temp[:])
+			return
+		for col in range(n):
+			if isvalid(row, col):
+				board[row][col]='Q'
+				backtrace(res, row+1)
+				board[row][col]='.'
+	backtrace(res, 0)
+	return res
